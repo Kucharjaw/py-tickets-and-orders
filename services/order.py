@@ -33,7 +33,9 @@ def create_order(
 
         for ticket_dict in tickets:
             movie_session = MovieSession.objects.get(
-                id=ticket_dict["movie_session"])
+                id=ticket_dict["movie_session"]
+            )
+
             ticket_obj = Ticket(
                 row=ticket_dict["row"],
                 seat=ticket_dict["seat"],

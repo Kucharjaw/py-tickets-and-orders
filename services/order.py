@@ -22,14 +22,12 @@ def create_order(
 
     with transaction.atomic():
 
+        order = Order.objects.create(user=user)
+
         if date:
             parsed_date = datetime.strptime(date, "%Y-%m-%d %H:%M")
-            order = Order(user=user)
-            order.created_at = parsed_date
-        else:
-            order = Order(user=user)
-
-        order.save()
+            Order.objects.filter(id=order.id).update(created_at=parsed_date)
+            order.refresh_from_db()
 
         for ticket_dict in tickets:
             movie_session = MovieSession.objects.get(

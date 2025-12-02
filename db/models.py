@@ -59,7 +59,7 @@ class MovieSession(models.Model):
 
     def __str__(self) -> str:
         return (f"{self.movie.title} "
-                f"{self.show_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                f"{self.show_time.strftime("%Y-%m-%d %H:%M:%S")}")
 
 
 class User(AbstractUser):
@@ -90,7 +90,7 @@ class Ticket(models.Model):
     seat = models.IntegerField()
 
     def __str__(self) -> str:
-        movie_time = self.movie_session.show_time.strftime('%Y-%m-%d %H:%M:%S')
+        movie_time = self.movie_session.show_time.strftime("%Y-%m-%d %H:%M:%S")
         return (f"{self.movie_session.movie.title}"
                 f" {movie_time} (row: {self.row}, seat: {self.seat})")
 

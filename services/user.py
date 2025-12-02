@@ -13,19 +13,13 @@ def create_user(
         first_name: str = None,
         last_name: str = None,
 ) -> User:
-
     user = User.objects.create_user(
         username=username,
         password=password,
-        email=email if email else ""
+        email=email if email else "",
+        first_name=first_name or "",
+        last_name=last_name or ""
     )
-    if first_name:
-        user.first_name = first_name
-
-    if last_name:
-        user.last_name = last_name
-
-    user.save()
     return user
 
 
@@ -45,9 +39,8 @@ def update_user(
         last_name: str = None,
 ) -> Optional[User]:
 
-    try:
-        user = User.objects.get(id=user_id)
-    except ObjectDoesNotExist:
+    user = get_user(user_id)
+    if not user:
         return None
 
     if username:

@@ -16,7 +16,6 @@ def create_order(
         date: str = None
 ) -> Optional[Order]:
 
-    user = get_user_model()
     try:
         user = User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -24,12 +23,13 @@ def create_order(
 
     with transaction.atomic():
 
-        order = Order.objects.create(user=user)
-
         if date:
             parsed_date = datetime.strptime(date, "%Y-%m-%d %H:%M")
-            order.created_at = parsed_date
-            order.save(update_fields=["created_at"])
+            order = Order(user=user, created_at=parsed_date)
+        else:
+            order = Order(user=user)
+
+        order.save()
 
         for ticket_dict in tickets:
             movie_session = MovieSession.objects.get(

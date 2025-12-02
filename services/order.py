@@ -1,10 +1,9 @@
-from django.db.models import QuerySet
-from typing import Optional
-from django.db import transaction
 from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from db.models import Order, Ticket, MovieSession
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
+from typing import Optional
 
 
 User = get_user_model()
@@ -14,18 +13,19 @@ def create_order(
         tickets: list[dict],
         username: str,
         date: str = None
-) -> Optional[Order]:
+) -> Order | None:
 
     try:
         user = User.objects.get(username=username)
-    except ObjectDoesNotExist:
+    except User.DoesNotExist:
         return None
 
     with transaction.atomic():
 
         if date:
             parsed_date = datetime.strptime(date, "%Y-%m-%d %H:%M")
-            order = Order(user=user, created_at=parsed_date)
+            order = Order(user=user)
+            order.created_at = parsed_date
         else:
             order = Order(user=user)
 
